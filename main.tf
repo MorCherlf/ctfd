@@ -23,9 +23,9 @@ resource "yandex_vpc_network" "ctf_net" {
 # 2. 在 VPC 中创建一个子网
 resource "yandex_vpc_subnet" "ctf_subnet" {
   name           = "ctf-subnet-a"
-  zone           = "ru-central1-a" # 作业中推荐的区域 
+  zone           = "ru-central1-a"
   network_id     = yandex_vpc_network.ctf_net.id
-  v4_cidr_blocks = ["10.1.0.0/16"] # 定义子网的 IP 地址范围
+  v4_cidr_blocks = ["10.1.0.0/16"]
 }
 
 # 3. 为 K8s 集群和节点创建一个专用的服务账户
@@ -101,7 +101,7 @@ resource "yandex_kubernetes_node_group" "ctf_node_group" {
   # 定义节点的规模（1个节点）
   scale_policy {
     fixed_scale {
-      size = 1
+      size = 2
     }
   }
   
