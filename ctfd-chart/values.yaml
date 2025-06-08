@@ -1,0 +1,58 @@
+# Chart 的全局设置
+replicaCount: 1
+
+image:
+  repository: ctfd/ctfd
+  pullPolicy: IfNotPresent
+  # 作业中指定的镜像版本 
+  tag: "3.5.1"
+
+service:
+  type: ClusterIP
+  port: 8000
+
+# Ingress 配置
+ingress:
+  enabled: true
+  className: "nginx"
+  hostname: ctfd.morcherlf.ru
+  # 添加以下 annotations
+  annotations:
+    cert-manager.io/cluster-issuer: "letsencrypt-prod-issuer" 
+
+  # 添加以下 tls 配置
+  tls:
+    - hosts:
+      - ctfd.morcherlf.ru
+      secretName: ctfd-tls-secret # 证书和私钥将存储在这个 Secret 中
+
+# 持久化存储配置 
+persistence:
+  enabled: true
+  # CTFd 上传文件的存储目录
+  mountPath: /var/uploads
+  size: 2Gi
+
+# CTFd 应用核心配置
+ctfdConfig:
+  # 必须设置一个随机的、复杂的密钥！
+  secretKey: "password"
+  # 连接到您之前部署的 MariaDB
+  databaseUrl: "mysql+pymysql://ctfd:password@mariadb.ctfd:3306/ctfd"
+  # 连接到您之前部署的 Redis
+  redisUrl: "redis://:password@redis-master.ctfd:6379"
+
+# 资源限制 (建议生产环境设置)
+resources: {}
+  # limits:
+  #   cpu: 500m
+  #   memory: 512Mi
+  # requests:
+  #   cpu: 200m
+  #   memory: 256Mi
+
+# 安全上下文 
+securityContext:
+  runAsUser: 1001
+  runAsGroup: 1001
+  fsGroup: 1001

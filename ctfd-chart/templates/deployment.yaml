@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "ctfd-chart.fullname" . }}
+  labels:
+    {{- include "ctfd-chart.labels" . | nindent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      {{- include "ctfd-chart.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "ctfd-chart.selectorLabels" . | nindent 8 }}
+    spec:
+      securityContext:
+        {{- toYaml .Values.securityContext | nindent 8 }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          env:
+            - name: DATABASE_URL
+              value: {{ .Values.ctfdConfig.databaseUrl | quote }}
+            - name: REDIS_URL
+              value: {{ .Values.ctfdConfig.redisUrl | quote }}
+            - name: SECRET_KEY
+              value: {{ .Values.ctfdConfig.secretKey | quote }}
+            - name: UPLOAD_FOLDER
+              value: {{ .Values.persistence.mountPath }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          volumeMounts:
+            {{- if .Values.persistence.enabled }}
+            - name: uploads-volume
+              mountPath: {{ .Values.persistence.mountPath }}
+            {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+      volumes:
+        {{- if .Values.persistence.enabled }}
+        - name: uploads-volume
+          persistentVolumeClaim:
+            claimName: {{ include "ctfd-chart.fullname" . }}-pvc
+        {{- end }}

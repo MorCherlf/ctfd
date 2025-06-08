@@ -1,0 +1,16 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-staging-issuer
+spec:
+  acme:
+    # Let's Encrypt 的演习环境服务器
+    server: https://acme-staging-v02.api.letsencrypt.org/directory
+    email: morcherlf.ru@gmail.com
+    privateKeySecretRef:
+      # 用于存储ACME账户私钥的 Secret 名称
+      name: morcherlf
+    solvers:
+    - http01:
+        ingress:
+          class: nginx

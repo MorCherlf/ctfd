@@ -1,0 +1,22 @@
+controller:
+  serviceType: ClusterIP
+
+  # Ingress 配置
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+
+    hostName: jenkins.morcherlf.ru 
+
+    # --- 使用 cert-manager 自动配置 TLS ---
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-prod-issuer"
+    tls:
+      - secretName: jenkins-tls-secret
+        hosts:
+          - jenkins.morcherlf.ru 
+
+
+persistence:
+  enabled: true
+  size: 10Gi

@@ -1,0 +1,81 @@
+# 本地 Terraform 目录
+.terraform/
+.terraform.lock.hcl
+
+# 包含敏感信息的文件
+terraform.tfvars
+*.tfvars
+*.tfvars.json
+
+# 崩溃日志
+crash.log
+crash.*.log
+
+# 排除所有 .tfstate 文件
+*.tfstate
+*.tfstate.*
+
+# 排除覆盖文件
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# 排除 CLI 配置文件
+.terraformrc
+terraform.rc 
+
+# Terraform state and configuration files
+# Terraform 的状态文件可能包含敏感信息，且是环境特定的，绝不应该提交
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# 包含敏感变量的 .tfvars 文件
+*.tfvars
+*.tfvars.json
+
+# Helm 打包文件和依赖项
+# 通常我们只提交 chart 的源码，而不是打包后的 .tgz 文件
+*.tgz
+charts/
+
+# Kubernetes 本地配置文件
+# 绝不要提交您的 kubeconfig 文件
+kubeconfig
+.kube/config
+
+# 通用日志文件
+*.log
+logs/
+*.log.*
+
+# 操作系统生成的文件
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+
+# Windows
+Thumbs.db
+desktop.ini
+
+# IDE 和编辑器相关的配置文件
+# VSCode
+.vscode/
+# JetBrains IDEs (GoLand, IntelliJ, etc.)
+.idea/
+# Vim
+*.swp
+*.swo
+
+# 临时文件和构建产物
+tmp/
+build/
+dist/

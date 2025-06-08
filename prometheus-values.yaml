@@ -1,0 +1,29 @@
+# prometheus-values.yaml
+prometheus:
+  prometheusSpec:
+    serviceMonitorSelector: {}
+    serviceMonitorNamespaceSelector: {}
+
+grafana:
+  # 启用 Grafana 的 Ingress
+  ingress:
+    enabled: true
+
+    ingressClassName: "nginx"
+
+    # --- 添加 cert-manager 的注解来自动申请 TLS 证书 ---
+    annotations:
+      cert-manager.io/cluster-issuer: "letsencrypt-prod-issuer"
+
+    hosts:
+      - monitor.morcherlf.ru
+
+    # --- 配置 TLS ---
+    tls:
+      - secretName: grafana-tls-secret # 存放证书的 Secret 名称
+        hosts:
+          - monitor.morcherlf.ru
+
+  persistence:
+    enabled: true
+    size: 5Gi

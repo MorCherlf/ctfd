@@ -1,0 +1,15 @@
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod-issuer
+spec:
+  acme:
+    # Let's Encrypt 的生产环境服务器
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: morcherlf.ru@gmail.com
+    privateKeySecretRef:
+      name: morcherlf
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
